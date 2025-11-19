@@ -41,4 +41,4 @@ Better Auth handles the authentication logic while shadcn/ui provides the visual
 
 ## Credits
 
-Inspired by the work of [@chronark_](https://x.com/chronark_) and [@legionsdev](https://x.com/legionsdev).
+UI inspired by the work of [@chronark_](https://x.com/chronark_) and [@legionsdev](https://x.com/legionsdev).

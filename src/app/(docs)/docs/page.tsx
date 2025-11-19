@@ -56,7 +56,7 @@ export default function DocsPage() {
         it yours. <WhiteSpan>You own it completely</WhiteSpan>.
       </DocsParagraph>
       <DocsParagraph>
-        Inspired by the work of{" "}
+        UI inspired by the work of{" "}
         <DocsLink href="https://x.com/chronark_" _blank>
           @chronark
         </DocsLink>{" "}
