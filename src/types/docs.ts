@@ -86,7 +86,7 @@ export const codeCommandX = (
   defaultManager,
 });
 
-export type DocsItem =
+type BaseDocsItem =
   | ReturnType<typeof title>
   | ReturnType<typeof subtitle>
   | ReturnType<typeof desc>
@@ -99,5 +99,28 @@ export type DocsItem =
   | ReturnType<typeof image>
   | ReturnType<typeof codeCommand>
   | ReturnType<typeof codeCommandX>;
+
+// Define the tab item type
+type TabItem = {
+  label: string;
+  value: string;
+  content: BaseDocsItem[];
+};
+
+// Now define tabs with the explicit type
+export const tabs = (
+  tabItems: TabItem[],
+  defaultValue?: string,
+): {
+  type: "tabs";
+  items: TabItem[];
+  defaultValue: string;
+} => ({
+  type: "tabs" as const,
+  items: tabItems,
+  defaultValue: defaultValue || tabItems[0]?.value || "",
+});
+
+export type DocsItem = BaseDocsItem | ReturnType<typeof tabs>;
 
 export type DocsContent = DocsItem[];

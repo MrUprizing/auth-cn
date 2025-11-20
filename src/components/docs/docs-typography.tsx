@@ -326,6 +326,33 @@ const DocsCodePreview = ({
   );
 };
 
+const DocsTabs = ({
+  items,
+  defaultValue,
+  children,
+}: {
+  items: Array<{ label: string; value: string }>;
+  defaultValue: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <Tabs defaultValue={defaultValue} className="mt-4">
+      <TabsList className="h-auto rounded-none border-b bg-transparent p-0">
+        {items.map((item) => (
+          <TabsTrigger
+            key={item.value}
+            value={item.value}
+            className="relative rounded-none border-none bg-transparent py-2 after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary hover:bg-transparent"
+          >
+            {item.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+      {children}
+    </Tabs>
+  );
+};
+
 export {
   DocsTitle,
   DocsSubtitle,
@@ -339,4 +366,5 @@ export {
   DocsCodePreview,
   DocsCodeCommand,
   DocsCodeCommandX,
+  DocsTabs,
 };

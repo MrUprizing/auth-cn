@@ -11,8 +11,10 @@ import {
   DocsSubDescription,
   DocsSubtitle,
   DocsTitle,
+  DocsTabs,
 } from "@/components/docs/docs-typography";
 import type { DocsContent, DocsItem } from "@/types/docs";
+import { TabsContent } from "@/components/ui/tabs";
 
 function renderItem(
   item: DocsItem,
@@ -90,6 +92,29 @@ function renderItem(
           command={item.command}
           defaultManager={item.defaultManager}
         />
+      );
+    case "tabs":
+      return (
+        <DocsTabs
+          key={index}
+          items={item.items.map((tab) => ({
+            label: tab.label,
+            value: tab.value,
+          }))}
+          defaultValue={item.defaultValue}
+        >
+          {item.items.map((tab) => (
+            <TabsContent
+              key={tab.value}
+              value={tab.value}
+              className="space-y-4"
+            >
+              {tab.content.map((contentItem, contentIndex) =>
+                renderItem(contentItem, contentIndex, context),
+              )}
+            </TabsContent>
+          ))}
+        </DocsTabs>
       );
     default:
       return null;
