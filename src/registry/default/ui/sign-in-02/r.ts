@@ -1,7 +1,4 @@
-import { getComponentCode } from "@/lib/get-component-code";
-import { codePreview, desc, links, title } from "@/types/docs";
 import type { RegistryItem } from "@/types/registry";
-import SignInComponent from "./component";
 
 export const item: RegistryItem = {
   name: "sign-in-02",

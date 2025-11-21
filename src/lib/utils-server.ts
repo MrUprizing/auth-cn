@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
+// For VIEW: find folder by item.name (only items with 'item' export)
 async function findFolderByItemName(
   category: string,
   itemName: string,
@@ -15,8 +16,17 @@ async function findFolderByItemName(
   for (const folder of folders) {
     const rFilePath = path.join(categoryPath, folder, "r.ts");
     if (fs.existsSync(rFilePath)) {
-      if (folder === itemName) {
-        return folder;
+      try {
+        const module = await import(
+          `@/registry/default/${category}/${folder}/r.ts`
+        );
+
+        // Only check if module has 'item' export
+        if (module.item && module.item.name === itemName) {
+          return folder;
+        }
+      } catch (error) {
+        console.error(`Error loading ${category}/${folder}/r.ts:`, error);
       }
     }
   }
@@ -24,8 +34,37 @@ async function findFolderByItemName(
   return null;
 }
 
+// For DOCS: find folder by folder name (can have 'item' or 'route')
+async function findFolderByName(
+  category: string,
+  folderName: string,
+): Promise<string | null> {
+  const categoryPath = path.join(
+    process.cwd(),
+    "src/registry/default",
+    category,
+  );
+  const folders = fs.readdirSync(categoryPath);
+
+  for (const folder of folders) {
+    const rFilePath = path.join(categoryPath, folder, "r.ts");
+    if (fs.existsSync(rFilePath) && folder === folderName) {
+      return folder;
+    }
+  }
+
+  return null;
+}
+
 export async function getRegistryItem(category: string, name: string) {
-  const folder = await findFolderByItemName(category, name);
+  // Try to find by item.name first (for view pages)
+  let folder = await findFolderByItemName(category, name);
+
+  // If not found, try by folder name (for docs pages)
+  if (!folder) {
+    folder = await findFolderByName(category, name);
+  }
+
   if (!folder) return null;
 
   const registryPath = path.join(
@@ -48,7 +87,8 @@ export async function getRegistryItem(category: string, name: string) {
 
 export async function getRegistryDocs(category: string, name: string) {
   try {
-    const folder = await findFolderByItemName(category, name);
+    // Docs always uses folder name
+    const folder = await findFolderByName(category, name);
     if (!folder) return null;
 
     const registryPath = path.join(
@@ -82,6 +122,7 @@ export async function getRegistryDocs(category: string, name: string) {
 
 export async function getComponent(category: string, name: string) {
   try {
+    // Components (view) only uses item.name
     const folder = await findFolderByItemName(category, name);
     if (!folder) return null;
 
@@ -106,7 +147,18 @@ export async function generateStaticParamsServer() {
       for (const folder of folders) {
         const rFilePath = path.join(categoryPath, folder, "r.ts");
         if (fs.existsSync(rFilePath)) {
-          params.push({ category, name: folder });
+          try {
+            const module = await import(
+              `@/registry/default/${category}/${folder}/r.ts`
+            );
+
+            // Only add params for items that have 'item' export (for view)
+            if (module.item && module.item.name) {
+              params.push({ category, name: module.item.name });
+            }
+          } catch (error) {
+            console.error(`Error loading ${category}/${folder}/r.ts:`, error);
+          }
         }
       }
     }
@@ -149,7 +201,6 @@ export async function getSidebarItems(): Promise<
 
             // Validate that docs exist
             if (!module.docs) {
-              // console.warn(`Missing docs export for ${category}/${folder}`);
               continue;
             }
 

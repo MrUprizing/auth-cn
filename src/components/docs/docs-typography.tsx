@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -21,6 +22,7 @@ import { OpenInV0Button } from "../open-v0";
 import "@/styles/image-zoom.css";
 import Zoom, { type UncontrolledProps } from "react-medium-image-zoom";
 import { DocsCodeCommand, DocsCodeCommandX } from "./docs-code-commands";
+import { Button } from "@/components/ui/button";
 
 function getImageSrc(src: ImageZoomProps["src"]): string {
   if (typeof src === "string") return src;
@@ -281,27 +283,37 @@ const DocsCodePreview = ({
           <div className="flex gap-2">
             <InstallCommandGroup componentName={name} />
             {category && itemName && (
-              <Link
-                href={`/view/${category}/${itemName}`}
-                target="_blank"
-                title="Open fullscreen"
-                className="p-2 hover:bg-accent rounded-md transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <title>ss</title>
-                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-                </svg>
-              </Link>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button variant="outline" size="icon-sm" disabled asChild>
+                      <Link
+                        // href={`/view/${category}/${itemName}`}
+                        href={`/view/ui/${name}`}
+                        target="_blank"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <title>ss</title>
+                          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                        </svg>
+                      </Link>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span>Preview</span>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
             <Tooltip>
               <TooltipTrigger asChild>
@@ -315,7 +327,9 @@ const DocsCodePreview = ({
         </div>
         <div className="flex-1 overflow-auto">
           <TabsContent value="preview" className="h-full">
-            <Component />
+            <div className="flex items-center justify-center py-10">
+              <Component />
+            </div>
           </TabsContent>
           <TabsContent value="code" className="h-full max-h-[500px] py-5">
             <Code code={code} language={language as BundledLanguage} />
