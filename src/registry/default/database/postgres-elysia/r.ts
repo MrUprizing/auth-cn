@@ -1,6 +1,7 @@
 import type { RegistryItem } from "@/types/registry";
 
 export const item: RegistryItem = {
+  name: "postgres-elysia",
   type: "registry:block",
   title: "PostgreSQL",
   description: "Setup Better Auth with PostgreSQL.",

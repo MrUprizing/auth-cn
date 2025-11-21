@@ -9,6 +9,7 @@ import {
   DocsTabs,
   DocsTitle,
 } from "@/components/docs/docs-typography";
+import { Separator } from "@/components/ui/separator";
 
 import { Step, StepContent, Steps } from "@/components/ui/steps";
 import { TabsContent } from "@/components/ui/tabs";
@@ -21,7 +22,7 @@ export default function Page() {
         Learn how to install and configure Better Auth and Shadcn UI in your
         project.
       </DocsDescription>
-
+      {/*<Separator className="my-6" />*/}
       <DocsTabs
         items={[
           { label: "Next.js", value: "nextjs" },
