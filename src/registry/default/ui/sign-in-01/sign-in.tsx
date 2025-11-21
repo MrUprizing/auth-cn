@@ -1,10 +1,22 @@
+"use client";
+
 import { GalleryVerticalEnd } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignIn01() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
   return (
     <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
       <div className="bg-card m-auto h-fit w-full max-w-sm rounded-[calc(var(--radius)+.125rem)] border p-0.5 shadow-md dark:[--color-muted:var(--color-zinc-900)]">
@@ -20,7 +32,30 @@ export default function SignIn01() {
           </div>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
-            <Button type="button" variant="outline">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={loading}
+              onClick={async () => {
+                await authClient.signIn.social(
+                  {
+                    provider: "google",
+                    callbackURL: "/dashboard",
+                  },
+                  {
+                    onRequest: () => {
+                      setLoading(true);
+                    },
+                    onResponse: () => {
+                      setLoading(false);
+                    },
+                    onError: (ctx) => {
+                      toast.error(ctx.error.message);
+                    },
+                  },
+                );
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="0.98em"
@@ -47,7 +82,30 @@ export default function SignIn01() {
               </svg>
               <span>Google</span>
             </Button>
-            <Button type="button" variant="outline">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={loading}
+              onClick={async () => {
+                await authClient.signIn.social(
+                  {
+                    provider: "microsoft",
+                    callbackURL: "/dashboard",
+                  },
+                  {
+                    onRequest: () => {
+                      setLoading(true);
+                    },
+                    onResponse: () => {
+                      setLoading(false);
+                    },
+                    onError: (ctx) => {
+                      toast.error(ctx.error.message);
+                    },
+                  },
+                );
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1em"
@@ -75,9 +133,16 @@ export default function SignIn01() {
           <div className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="email" className="block text-sm">
-                Username
+                Email
               </Label>
-              <Input type="email" required name="email" id="email" />
+              <Input
+                type="email"
+                required
+                name="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
 
             <div className="space-y-0.5">
@@ -100,10 +165,43 @@ export default function SignIn01() {
                 name="pwd"
                 id="pwd"
                 className="input sz-md variant-mixed"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="password"
               />
             </div>
 
-            <Button className="w-full">Sign In</Button>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading}
+              onClick={async (e) => {
+                e.preventDefault();
+                await authClient.signIn.email(
+                  {
+                    email,
+                    password,
+                    callbackURL: "/dashboard",
+                  },
+                  {
+                    onRequest: () => {
+                      setLoading(true);
+                    },
+                    onResponse: () => {
+                      setLoading(false);
+                    },
+                    onError: (ctx) => {
+                      toast.error(ctx.error.message);
+                    },
+                    onSuccess: () => {
+                      router.push("/dashboard");
+                    },
+                  },
+                );
+              }}
+            >
+              {loading ? <Spinner /> : <p>Sign In</p>}
+            </Button>
           </div>
         </div>
 

@@ -10,6 +10,7 @@ import {
 import type { RegistryItem } from "@/types/registry";
 
 export const item: RegistryItem = {
+  name: "sqlite",
   type: "registry:block",
   title: "SQLite",
   description: "A setup for Better Auth with SQLite",

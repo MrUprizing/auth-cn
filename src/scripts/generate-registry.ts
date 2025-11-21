@@ -13,7 +13,6 @@ function processRegistryItem(
   style: string,
   category: string,
   componentDir: string,
-  autoName: string,
 ): RegistryItem {
   const processedFiles = item.files?.map((file) => {
     let fullPath = file.path;
@@ -29,7 +28,7 @@ function processRegistryItem(
   });
 
   const processedItem: RegistryItem = {
-    name: autoName,
+    name: item.name,
     type: item.type,
     ...(item.title && { title: item.title }),
     ...(item.description && { description: item.description }),
@@ -54,26 +53,26 @@ function processRegistryItem(
 }
 
 function checkForDuplicates(
-  autoName: string,
+  itemName: string,
   fullPath: string,
   nameMap: Map<string, string>,
   duplicateNames: Array<{ name: string; paths: string[] }>,
 ): void {
-  if (nameMap.has(autoName)) {
+  if (nameMap.has(itemName)) {
     // biome-ignore lint/style/noNonNullAssertion: <Vibe code :)>
-    const existingPath = nameMap.get(autoName)!;
-    const duplicate = duplicateNames.find((d) => d.name === autoName);
+    const existingPath = nameMap.get(itemName)!;
+    const duplicate = duplicateNames.find((d) => d.name === itemName);
 
     if (duplicate) {
       duplicate.paths.push(fullPath);
     } else {
       duplicateNames.push({
-        name: autoName,
+        name: itemName,
         paths: [existingPath, fullPath],
       });
     }
   } else {
-    nameMap.set(autoName, fullPath);
+    nameMap.set(itemName, fullPath);
   }
 }
 
@@ -96,17 +95,21 @@ async function processComponentInCategory(
     const module = await import(fileUrl);
 
     if (module.item) {
-      const autoName = componentDir;
+      const itemName = module.item.name;
       const fullPath = `${style}/${category}/${componentDir}`;
 
-      checkForDuplicates(autoName, fullPath, nameMap, duplicateNames);
+      if (!itemName) {
+        console.error(`    ❌ Missing 'name' in ${rFilePath}`);
+        return false;
+      }
+
+      checkForDuplicates(itemName, fullPath, nameMap, duplicateNames);
 
       const processedItem = processRegistryItem(
         module.item,
         style,
         category,
         componentDir,
-        autoName,
       );
       items.push(processedItem);
       console.log(`    ✅ Loaded: ${processedItem.name}`);
@@ -137,17 +140,21 @@ async function processDirectComponent(
     const module = await import(fileUrl);
 
     if (module.item) {
-      const autoName = category;
+      const itemName = module.item.name;
       const fullPath = `${style}/${category}`;
 
-      checkForDuplicates(autoName, fullPath, nameMap, duplicateNames);
+      if (!itemName) {
+        console.error(`    ❌ Missing 'name' in ${directRFile}`);
+        return false;
+      }
+
+      checkForDuplicates(itemName, fullPath, nameMap, duplicateNames);
 
       const processedItem = processRegistryItem(
         module.item,
         style,
         category,
         "",
-        autoName,
       );
       items.push(processedItem);
       console.log(`    ✅ Loaded: ${processedItem.name}`);
@@ -230,7 +237,7 @@ async function generateRegistry() {
       dup.paths.forEach((path) => {
         console.error(`     📁 ${path}`);
       });
-      console.error(`     → Change folder name to make it unique`);
+      console.error(`     → Change the 'name' in r.ts to make it unique`);
     });
     process.exit(1);
   }

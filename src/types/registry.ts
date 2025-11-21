@@ -5,7 +5,7 @@ export interface Registry {
 }
 
 export interface RegistryItem {
-  name?: string;
+  name: string;
   type:
     | "registry:lib"
     | "registry:block"

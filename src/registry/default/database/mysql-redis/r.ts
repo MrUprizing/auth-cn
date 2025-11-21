@@ -1,6 +1,7 @@
 import type { RegistryItem } from "@/types/registry";
 
 export const item: RegistryItem = {
+  name: "mysql-redis",
   type: "registry:block",
   title: "MySQL",
   description: "A setup for Better Auth with MySQL",

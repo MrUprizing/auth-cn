@@ -1,6 +1,6 @@
 //Docs helpers
 import type { BundledLanguage } from "shiki";
-import type { ImageZoomProps } from "@/components/docs/docs-typography";
+import type { ImageZoomProps } from "@/types/image-zoom";
 
 export const title = (text: string) => ({ type: "title" as const, text });
 

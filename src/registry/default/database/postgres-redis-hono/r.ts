@@ -1,6 +1,7 @@
 import type { RegistryItem } from "@/types/registry";
 
 export const item: RegistryItem = {
+  name: "postgres-redis-hono",
   type: "registry:block",
   title: "PostgreSQL + Redis",
   description: "Setup Better Auth with PostgreSQL + Redis.",

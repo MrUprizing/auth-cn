@@ -21,7 +21,7 @@ export default function Page() {
         Learn how to install and configure Better Auth and Shadcn UI in your
         project.
       </DocsDescription>
-
+      {/*<Separator className="my-6" />*/}
       <DocsTabs
         items={[
           { label: "Next.js", value: "nextjs" },

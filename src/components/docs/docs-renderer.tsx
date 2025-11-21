@@ -10,11 +10,11 @@ import {
   DocsParagraph,
   DocsSubDescription,
   DocsSubtitle,
-  DocsTitle,
   DocsTabs,
+  DocsTitle,
 } from "@/components/docs/docs-typography";
-import type { DocsContent, DocsItem } from "@/types/docs";
 import { TabsContent } from "@/components/ui/tabs";
+import type { DocsContent, DocsItem } from "@/types/docs";
 
 function renderItem(
   item: DocsItem,

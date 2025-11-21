@@ -1,7 +1,4 @@
-import { getComponentCode } from "@/lib/get-component-code";
-import { codePreview, desc, links, title } from "@/types/docs";
 import type { RegistryItem } from "@/types/registry";
-import SignInComponent from "./component";
 
 export const item: RegistryItem = {
   name: "sign-in-01",
@@ -17,15 +14,4 @@ export const item: RegistryItem = {
   dependencies: ["lucide-react"],
   registryDependencies: ["button", "input", "label", "spinner", "sonner"],
   docs: "You need to have Better Auth set up to use this login component. Visit https://auth.uprizing.me/docs for install.",
-};
-
-export const docs = async () => {
-  const signUpCode = await getComponentCode("sign-in/sign-in-01/sign-in");
-
-  return [
-    title(item.title as string),
-    desc(item.description as string),
-    links(["Tailark", "https://tailark.com/sign-in"]),
-    codePreview(item.name as string, SignInComponent, signUpCode, "tsx"),
-  ];
 };
