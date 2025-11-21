@@ -14,7 +14,7 @@ export const docs = async () => {
   const signIn02 = await getComponentCode("ui/sign-in-01/sign-in");
 
   return [
-    title("Sign up components"),
+    title("Login components"),
     desc(route.description),
 
     subtitle("Login 01"),
