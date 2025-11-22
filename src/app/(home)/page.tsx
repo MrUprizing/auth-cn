@@ -5,6 +5,7 @@ import { GithubIcon } from "lucide-react";
 import { Link } from "next-view-transitions";
 import ThemeToggle from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { DocsLink } from "@/components/docs/docs-typography";
 
 const navigation = [
   { name: "Docs", href: "/docs" },
@@ -53,21 +54,13 @@ export default function Home() {
       <div className="my-16 text-center animate-fade-in">
         <h2 className="text-muted-foreground font-mono">
           Full-stack Components for{" "}
-          <Link
-            target="_blank"
-            href="https://better-auth.com/"
-            className="duration-100 hover:text-primary text-primary"
-          >
+          <DocsLink href="https://better-auth.com/" _blank>
             Better Auth
-          </Link>{" "}
+          </DocsLink>{" "}
           using{" "}
-          <Link
-            target="_blank"
-            href="https://ui.shadcn.com"
-            className="duration-100 hover:text-primary text-primary"
-          >
+          <DocsLink href="https://ui.shadcn.com" _blank>
             shadcn/registry
-          </Link>
+          </DocsLink>
           .
         </h2>
       </div>
