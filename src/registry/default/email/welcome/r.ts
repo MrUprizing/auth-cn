@@ -3,10 +3,9 @@ import {
   desc,
   image,
   links,
+  p,
   subtitle,
   title,
-  p,
-  codePreview,
 } from "@/types/docs";
 import type { RegistryItem } from "@/types/registry";
 import type Route from "@/types/route";

@@ -14,7 +14,11 @@ import {
   Text,
 } from "@react-email/components";
 
-export const StripeWelcomeEmail = () => (
+interface StripeWelcomeEmailProps {
+  name: string;
+}
+
+export const StripeWelcomeEmail = ({ name }: StripeWelcomeEmailProps) => (
   <Html>
     <Head>
       <Font
@@ -31,19 +35,21 @@ export const StripeWelcomeEmail = () => (
     <Tailwind>
       <Body className="bg-[#f6f9fc] font-stripe">
         <Preview>
-          You're now ready to make live transactions with Stripe!
+          Welcome {name}, you're now ready to make live transactions with
+          Stripe!
         </Preview>
         <Container className="bg-white mx-auto py-5 pb-12 mb-16">
           <Section className="px-12">
             <Img
-              src={
-                "https://react-email-demo-m5r635azu-resend.vercel.app/static/stripe-logo.png"
-              }
+              src={`https://react-email-demo-m5r635azu-resend.vercel.app/static/stripe-logo.png`}
               width="49"
               height="21"
               alt="Stripe"
             />
             <Hr className="border-[#e6ebf1] my-5" />
+            <Text className="text-[#525f7f] text-base leading-6 text-left">
+              Hi {name},
+            </Text>
             <Text className="text-[#525f7f] text-base leading-6 text-left">
               Thanks for submitting your account information. You're now ready
               to make live transactions with Stripe!
@@ -108,5 +114,10 @@ export const StripeWelcomeEmail = () => (
     </Tailwind>
   </Html>
 );
+
+StripeWelcomeEmail.PreviewProps = {
+  name: "Mr Uprizing",
+  email: "",
+} as StripeWelcomeEmailProps;
 
 export default StripeWelcomeEmail;

@@ -3,9 +3,9 @@
 
 import { GithubIcon } from "lucide-react";
 import { Link } from "next-view-transitions";
+import { DocsLink } from "@/components/docs/docs-typography";
 import ThemeToggle from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { DocsLink } from "@/components/docs/docs-typography";
 
 const navigation = [
   { name: "Docs", href: "/docs" },

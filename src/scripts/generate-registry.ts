@@ -59,6 +59,7 @@ function checkForDuplicates(
   duplicateNames: Array<{ name: string; paths: string[] }>,
 ): void {
   if (nameMap.has(itemName)) {
+    // biome-ignore lint/style/noNonNullAssertion: <Vibe code>
     const existingPath = nameMap.get(itemName)!;
     const duplicate = duplicateNames.find((d) => d.name === itemName);
 
