@@ -42,6 +42,12 @@ export const docs = [
   desc("Preview email."),
   codeCommandX("shadcn@latest add @auth-cn/email-notion-welcome"),
 
+  subtitle("Slack"),
+  p("Email template integrated with Slack branding."),
+  image("/og.png", "test"),
+  desc("Preview email."),
+  codeCommandX("shadcn@latest add @auth-cn/email-slack-welcome"),
+
   subtitle("Stripe"),
   p("Email template integrated with Stripe branding."),
   image("/og.png", "test"),
