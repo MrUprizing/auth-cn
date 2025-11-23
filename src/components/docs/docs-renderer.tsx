@@ -55,8 +55,8 @@ function renderItem(
           component={item.component}
           code={item.code}
           language={item.language}
-          category={context?.category}
-          itemName={context?.name}
+          // category={context?.category}
+          // itemName={context?.name}
         />
       );
     case "links":
