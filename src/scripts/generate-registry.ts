@@ -59,7 +59,7 @@ function checkForDuplicates(
   duplicateNames: Array<{ name: string; paths: string[] }>,
 ): void {
   if (nameMap.has(itemName)) {
-    // biome-ignore lint/style/noNonNullAssertion: <Vibe code :)>
+    // biome-ignore lint/style/noNonNullAssertion: <Vibe code>
     const existingPath = nameMap.get(itemName)!;
     const duplicate = duplicateNames.find((d) => d.name === itemName);
 
@@ -83,43 +83,54 @@ async function processComponentInCategory(
   nameMap: Map<string, string>,
   duplicateNames: Array<{ name: string; paths: string[] }>,
   items: RegistryItem[],
-): Promise<boolean> {
+): Promise<number> {
   const rFilePath = join(REGISTRY_PATH, style, category, componentDir, "r.ts");
 
   if (!existsSync(rFilePath)) {
-    return false;
+    return 0;
   }
 
   try {
     const fileUrl = `file://${rFilePath}`;
     const module = await import(fileUrl);
 
-    if (module.item) {
-      const itemName = module.item.name;
+    let loadedCount = 0;
+
+    // Support both single item and array of items
+    const itemsToProcess = module.items
+      ? module.items
+      : module.item
+        ? [module.item]
+        : [];
+
+    for (const registryItem of itemsToProcess) {
+      const itemName = registryItem.name;
       const fullPath = `${style}/${category}/${componentDir}`;
 
       if (!itemName) {
         console.error(`    ❌ Missing 'name' in ${rFilePath}`);
-        return false;
+        continue;
       }
 
       checkForDuplicates(itemName, fullPath, nameMap, duplicateNames);
 
       const processedItem = processRegistryItem(
-        module.item,
+        registryItem,
         style,
         category,
         componentDir,
       );
       items.push(processedItem);
       console.log(`    ✅ Loaded: ${processedItem.name}`);
-      return true;
+      loadedCount++;
     }
+
+    return loadedCount;
   } catch (error) {
     console.error(`    ❌ Error loading ${rFilePath}:`, error);
   }
 
-  return false;
+  return 0;
 }
 
 async function processDirectComponent(
@@ -128,43 +139,54 @@ async function processDirectComponent(
   nameMap: Map<string, string>,
   duplicateNames: Array<{ name: string; paths: string[] }>,
   items: RegistryItem[],
-): Promise<boolean> {
+): Promise<number> {
   const directRFile = join(REGISTRY_PATH, style, category, "r.ts");
 
   if (!existsSync(directRFile)) {
-    return false;
+    return 0;
   }
 
   try {
     const fileUrl = `file://${directRFile}`;
     const module = await import(fileUrl);
 
-    if (module.item) {
-      const itemName = module.item.name;
+    let loadedCount = 0;
+
+    // Support both single item and array of items
+    const itemsToProcess = module.items
+      ? module.items
+      : module.item
+        ? [module.item]
+        : [];
+
+    for (const registryItem of itemsToProcess) {
+      const itemName = registryItem.name;
       const fullPath = `${style}/${category}`;
 
       if (!itemName) {
         console.error(`    ❌ Missing 'name' in ${directRFile}`);
-        return false;
+        continue;
       }
 
       checkForDuplicates(itemName, fullPath, nameMap, duplicateNames);
 
       const processedItem = processRegistryItem(
-        module.item,
+        registryItem,
         style,
         category,
         "",
       );
       items.push(processedItem);
       console.log(`    ✅ Loaded: ${processedItem.name}`);
-      return true;
+      loadedCount++;
     }
+
+    return loadedCount;
   } catch (error) {
     console.error(`    ❌ Error loading ${directRFile}:`, error);
   }
 
-  return false;
+  return 0;
 }
 
 async function generateRegistry() {
@@ -194,7 +216,7 @@ async function generateRegistry() {
     for (const entry of entries) {
       const category = entry.name;
 
-      const isDirectComponent = await processDirectComponent(
+      const directComponentCount = await processDirectComponent(
         style,
         category,
         nameMap,
@@ -202,16 +224,16 @@ async function generateRegistry() {
         items,
       );
 
-      if (isDirectComponent) {
-        totalComponents++;
-      } else {
+      totalComponents += directComponentCount;
+
+      if (directComponentCount === 0) {
         const categoryPath = join(stylePath, category);
         const componentDirs = readdirSync(categoryPath, {
           withFileTypes: true,
         }).filter((dirent) => dirent.isDirectory());
 
         for (const componentDir of componentDirs) {
-          const loaded = await processComponentInCategory(
+          const loadedCount = await processComponentInCategory(
             style,
             category,
             componentDir.name,
@@ -220,9 +242,7 @@ async function generateRegistry() {
             items,
           );
 
-          if (loaded) {
-            totalComponents++;
-          }
+          totalComponents += loadedCount;
         }
       }
     }

@@ -25,6 +25,7 @@ export async function DocsSidebar() {
   // Define the order of categories manually
   const categoryOrder = [
     "database",
+    "3rd-party",
     "ui",
     // Add more categories here in the order you want
   ];

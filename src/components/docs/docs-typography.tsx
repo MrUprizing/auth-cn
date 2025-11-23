@@ -53,7 +53,7 @@ const DocsSubtitle = ({
   withoutLink?: boolean;
 }) => {
   return (
-    <h3 id={title} className={cn(className, "text-lg font-medium mt-4")}>
+    <h3 id={title} className={cn(className, "text-xl font-medium mt-4")}>
       {withoutLink ? title : <a href={`#${title}`}>{title}</a>}
     </h3>
   );
@@ -186,9 +186,10 @@ const DocsImage = ({
       <Image
         src={imageSrc}
         alt={alt}
+        className="rounded-xl border mt-2"
         width={width ? Number(width) : 900}
         height={height ? Number(height) : 600}
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 900px"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 900px "
       />
     </Zoom>
   );
