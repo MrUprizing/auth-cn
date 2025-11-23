@@ -252,7 +252,9 @@ const DocsCodePreview = ({
           </TabsList>
           <div className="flex gap-2">
             <InstallCommandGroup componentName={name} />
-            {category && itemName && (
+            {/*Page preview*/}
+
+            {/*{category && itemName && (
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
@@ -284,7 +286,7 @@ const DocsCodePreview = ({
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-            )}
+            )}*/}
             <Tooltip>
               <TooltipTrigger asChild>
                 <OpenInV0Button
