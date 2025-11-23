@@ -9,11 +9,6 @@ import Code from "@/components/ui/code";
 import CodeBlockHtml from "@/components/ui/code";
 import { CopyButton } from "@/components/ui/copy-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { InstallCommandGroup } from "../install-command-group";
 import { OpenInV0Button } from "../open-v0";
@@ -285,14 +280,7 @@ const DocsCodePreview = ({
                 </Tooltip>
               </TooltipProvider>
             )}*/}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <OpenInV0Button
-                  url={`https://auth.uprizing.me/r/${name}.json`}
-                />
-              </TooltipTrigger>
-              <TooltipContent>Open in v0</TooltipContent>
-            </Tooltip>
+            <OpenInV0Button url={`https://auth.uprizing.me/r/${name}.json`} />
           </div>
         </div>
         <div className="flex-1 overflow-auto">
