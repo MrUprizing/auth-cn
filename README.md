@@ -38,7 +38,3 @@ npx shadcn@latest add @auth-cn/[component-name]
 Install components with a single command, customize them to fit your needs, and deploy. All components are fully customizable since the code lives in your project.
 
 Better Auth handles the authentication logic while shadcn/ui provides the visual components.
-
-## Credits
-
-UI inspired by the work of [@chronark_](https://x.com/chronark_) and [@legionsdev](https://x.com/legionsdev).
